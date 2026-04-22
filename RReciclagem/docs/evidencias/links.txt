@@ -1,0 +1,11 @@
+﻿Evidencias sugeridas:
+
+1) Pipeline CI rodando (build + test)
+2) Push de imagem no GHCR
+3) Deploy em staging
+4) Deploy em production
+5) API respondendo /actuator/health
+
+Links dos workflows:
+- staging:
+- production:

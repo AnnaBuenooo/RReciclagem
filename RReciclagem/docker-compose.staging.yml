@@ -1,0 +1,10 @@
+﻿services:
+  app:
+    environment:
+      SPRING_PROFILES_ACTIVE: staging
+      LOG_LEVEL_APP: DEBUG
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M

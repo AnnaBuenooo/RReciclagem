@@ -1,0 +1,51 @@
+﻿services:
+  db:
+    image: postgres:16-alpine
+    container_name: rreciclagem-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rreciclagem}
+      POSTGRES_USER: ${POSTGRES_USER:-rreciclagem}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rreciclagem123}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rreciclagem} -d ${POSTGRES_DB:-rreciclagem}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rreciclagem-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${APP_IMAGE:-rreciclagem-app:local}
+    container_name: rreciclagem-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-staging}
+      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-rreciclagem}
+      DB_USER: ${POSTGRES_USER:-rreciclagem}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-rreciclagem123}
+      JWT_SECRET: ${JWT_SECRET}
+      LOG_LEVEL_APP: ${LOG_LEVEL_APP:-INFO}
+      LOG_LEVEL_SECURITY: ${LOG_LEVEL_SECURITY:-INFO}
+      JAVA_OPTS: ${JAVA_OPTS:-}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - rreciclagem-net
+
+networks:
+  rreciclagem-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

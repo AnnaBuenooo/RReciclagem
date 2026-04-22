@@ -1,0 +1,9 @@
+﻿target
+.mvn/repo
+.git
+.gitignore
+.idea
+*.iml
+README.Docker.md
+RReciclagem.zip
+*.log

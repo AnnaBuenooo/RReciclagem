@@ -1,0 +1,12 @@
+﻿services:
+  app:
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      LOG_LEVEL_APP: INFO
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 1024M
